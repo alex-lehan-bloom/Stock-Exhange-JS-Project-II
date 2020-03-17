@@ -1,0 +1,32 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+.main {
+  min-width: 1000px;
+  width: auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.company-info {
+  display: flex;
+}
+.company-name,
+.company-logo {
+  margin-right: 20px;
+}
+.stock-info {
+  display: flex;
+  align-items: center;
+}
+.stock-info h3 {
+  margin-right: 5px;
+}
+
+.stock-up {
+  color: green;
+}
+.stock-down {
+  color: red;
+}
