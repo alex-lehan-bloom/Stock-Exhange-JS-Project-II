@@ -4,22 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bloom | Company</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="../css/general.css" />
     <link rel="stylesheet" href="../css/company.css" />
   </head>
   <body>
     <div class="main">
       <div id="companyInfo" class="company-info">
-        <img id="companyLogo" class="company-logo" />
-        <h1 id="companyName" class="company-name"></h1>
-        <h2 id="companyIndustry"></h2>
+        <div class="row">
+          <div class="col-3">
+            <img id="companyLogo" class="company-logo" />
+          </div>
+          <div class="col-6">
+            <h1 id="companyName" class="company-name"></h1>
+          </div>
+          <div class="col-3">
+            <p id="companyIndustry"></p>
+          </div>
+        </div>
+        <a id="website" class="website"></a>
       </div>
-      <div class="stock-info">
-        <h3>Stock Price:</h3>
-        <h3 id="stockPrice"></h3>
-        <p id="changes"></p>
+      <div class="main-content">
+        <div class="stock-info">
+          <h3>Stock Price:</h3>
+          <span id="stockPrice" class="stock-price"></span>
+          <span id="stockUpDown"></span>
+        </div>
+        <p id="description" class="description"></p>
+        <canvas id="stockHistory" class="chart"></canvas>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="../js/company.js"></script>
   </body>
 </html>
