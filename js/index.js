@@ -1,12 +1,24 @@
+searchIfSymboleInURL();
+function searchIfSymboleInURL() {
+  let urlParams = new URLSearchParams(window.location.search);
+  let symbol = urlParams.get("symbol");
+  if (symbol !== null) {
+    search(symbol, data => {
+      displaySearchResults(data);
+    });
+    let searchBar = document.getElementById("searchBar");
+    searchBar.value = symbol;
+  }
+}
 
 let searchBar = document.getElementById("searchBar");
 searchBar.onkeyup = debounce(() => {
-  let userInput = document.getElementById("searchBar").value;
-  if (userInput.length === 0) {
+  let searchQuery = document.getElementById("searchBar").value;
+  if (searchQuery.length === 0) {
     let ul = document.getElementById("searchResults");
     ul.innerHTML = "";
   } else {
-    search(userInput, data => {
+    search(searchQuery, data => {
       displaySearchResults(data);
     });
   }
@@ -14,19 +26,26 @@ searchBar.onkeyup = debounce(() => {
 
 let searchButton = document.getElementById("searchButton");
 searchButton.addEventListener("click", () => {
-  let userInput = document.getElementById("searchBar").value;
-  search(userInput, data => {
+  let searchQuery = document.getElementById("searchBar").value;
+  search(searchQuery, data => {
     displaySearchResults(data);
   });
 });
 
-async function search(userInput, callback) {
-  console.log("SEARCHING");
+async function search(searchQuery, callback) {
   showSpinner();
   let response = await fetch(
-    `https://financialmodelingprep.com/api/v3/search?query=${userInput}&limit=10&exchange=NASDAQ`
+    `https://financialmodelingprep.com/api/v3/search?query=${searchQuery}&limit=10&exchange=NASDAQ`
   );
   let data = await response.json();
+  let newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    "?symbol=" +
+    searchQuery;
+  window.history.pushState({ path: newurl }, "", newurl);
   callback(data);
 }
 
@@ -64,18 +83,16 @@ function hideSpinner() {
 }
 
 function debounce(cb, interval, immediate) {
-  var timeout;
-  console.log("1");
+  let timeout;
   return function() {
-    console.log("2");
-    var context = this,
+    let context = this,
       args = arguments;
-    var later = function() {
+    let later = function() {
       timeout = null;
       if (!immediate) cb.apply(context, args);
     };
 
-    var callNow = immediate && !timeout;
+    let callNow = immediate && !timeout;
 
     clearTimeout(timeout);
     timeout = setTimeout(later, interval);
