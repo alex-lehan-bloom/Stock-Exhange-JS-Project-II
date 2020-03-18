@@ -26,9 +26,19 @@ body {
   /* width: 250px; */
   margin-top: 20px;
 }
-.btn {
-  margin-right: 20px;
+.form-control {
+  border-color: black;
 }
+/* .btn {
+  margin-right: 20px;
+  background-color: #383838;
+  color: white;
+  border-color: black;
+} */
+.btn:hover {
+  pointer-events: none;
+}
+
 .link-margin {
   margin-right: 10px;
 }

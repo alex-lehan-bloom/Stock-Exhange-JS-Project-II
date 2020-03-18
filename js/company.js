@@ -43,10 +43,11 @@ function setStockPrice(data) {
   stockUpOrDown.classList.remove("stock-up");
   stockUpOrDown.classList.remove("stock-down");
   stockUpOrDown.innerText = `${data.profile.changesPercentage}`;
-  if (data.profile.changesPercentage < "0") {
-    stockUpOrDown.classList.add("stock-down");
-  } else {
+  console.log(data.profile.changesPercentage.includes("+"));
+  if (data.profile.changesPercentage.includes("+") === true) {
     stockUpOrDown.classList.add("stock-up");
+  } else {
+    stockUpOrDown.classList.add("stock-down");
   }
 }
 
@@ -60,6 +61,7 @@ async function getStockPriceHistory(symbol, callback) {
     `https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}?serietype=line`
   );
   let data = await response.json();
+  console.log(data);
   callback(data);
 }
 
@@ -81,6 +83,12 @@ function createGraph(data) {
     options: {}
   });
   let year = 2005;
+  let startDateOfStock = data.historical[0].date.slice(0, 4);
+  if (startDateOfStock > year.toString()) {
+    year = parseInt(startDateOfStock);
+  }
+  console.log(data.historical[0].date.slice(0, 4));
+  console.log("Year" + year);
   for (i = 0; i < data.historical.length; i++) {
     if (data.historical[i].date.slice(0, 4) === year.toString()) {
       chart.data.labels.push(year);
@@ -88,5 +96,7 @@ function createGraph(data) {
       year += 1;
     }
   }
+  console.log(chart.data.labels);
+  console.log(chart.data.datasets[0].data);
   chart.update();
 }
