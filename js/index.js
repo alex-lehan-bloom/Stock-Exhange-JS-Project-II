@@ -1,10 +1,12 @@
-searchIfSymboleInURL();
-function searchIfSymboleInURL() {
+searchIfSymbolInURL();
+function searchIfSymbolInURL() {
   let urlParams = new URLSearchParams(window.location.search);
   let symbol = urlParams.get("symbol");
   if (symbol !== null) {
     search(symbol, data => {
-      displaySearchResults(data);
+      displaySearchResults(data, allProfiles => {
+        test(allProfiles);
+      });
     });
     let searchBar = document.getElementById("searchBar");
     searchBar.value = symbol;
@@ -49,25 +51,61 @@ async function search(searchQuery, callback) {
   callback(data);
 }
 
-function displaySearchResults(data) {
+function displaySearchResults(data, callback) {
   let ul = document.getElementById("searchResults");
   ul.innerHTML = "";
-  for (i = 0; i < data.length; i++) {
-    let companyName = document.createElement("a");
-    companyName.target = "_blank";
-    companyName.href = `./company.html?symbol=${data[i].symbol}`;
-    companyName.innerHTML = `${data[i].name}`;
-    companyName.classList.add("link-margin");
-    let companySymbol = document.createElement("a");
-    companySymbol.target = "_blank";
-    companySymbol.href = `./company.html?symbol=${data[i].symbol}`;
-    companySymbol.innerHTML = `${data[i].symbol}`;
-    let li = document.createElement("li");
-    li.classList.add("list-group-item");
-    li.append(companyName, companySymbol);
-    ul.append(li);
-  }
+  let allProfiles = [];
+  for (let i = 0; i < data.length; i++) {
+  //   getCompanyProfile(data[i].symbol, companyProfile => {
+  //     // console.log(companyProfile);
+  //     // console.log("Profile");
+  //     // console.log(companyProfile);
+  //     allProfiles.push(companyProfile.profile);
+  //     // console.log("SearchResults");
+  //     // console.log(data);
+  //     // let searchResults = data.map(info => {
+  //     //   return `<li>${info.name} ${info.symbol}</li>`;
+  //     // });
+  //   });
+  // }
+  // console.log(searchResultsToDisplay);
+  // let companyName = document.createElement("a");
+  // companyName.target = "_blank";
+  // companyName.href = `./company.html?symbol=${data[i].symbol}`;
+  // companyName.innerHTML = `${data[i].name}`;
+  // companyName.classList.add("link-margin");
+  // let companySymbol = document.createElement("a");
+  // companySymbol.target = "_blank";
+  // companySymbol.href = `./company.html?symbol=${data[i].symbol}`;
+  // companySymbol.innerHTML = `${data[i].symbol}`;
+  // let li = document.createElement("li");
+  // li.classList.add("list-group-item");
+  // li.append(companyName, companySymbol);
+  // ul.append(li);
+
+  callback(allProfiles);
+}
+
+function test(allProfiles) {
+  console.log("ALL PROFILES");
+  console.log(allProfiles);
+  console.log("After");
+  let help = ["item 1"];
+  // console.log(help);
+  help = allProfiles.map(x => {
+    console.log("inside");
+    return x.beta;
+  });
+  console.log(help);
   hideSpinner();
+}
+
+async function getCompanyProfile(companySymbol, callback) {
+  let response = await fetch(
+    `https://financialmodelingprep.com/api/v3/company/profile/${companySymbol}`
+  );
+  let data = await response.json();
+  callback(data);
 }
 
 function showSpinner() {

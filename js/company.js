@@ -10,7 +10,6 @@ getStockPriceHistory(symbol, data => {
   createGraph(data);
 });
 
-//Should move these all into separate functions
 async function getCompanyProfile(symbol, callback) {
   let response = await fetch(
     `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`

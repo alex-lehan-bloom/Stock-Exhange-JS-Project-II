@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let objects = [{ name: "Alex" }, { name: "Ruthy" }];
+      let newObjects = objects.map(x => {
+        console.log("Inside");
+        return x.name;
+      });
+      console.log(objects);
+      console.log(newObjects);
+
+      let newArray = [];
+      newArray.push([{ name: "test" }]);
+      console.log(newArray.length);
+
+      search();
+      async function search() {
+        let response = await fetch(
+          `https://financialmodelingprep.com/api/v3/search?query=aa&limit=10&exchange=NASDAQ`
+        );
+        let data = await response.json();
+        let allProfiles = [];
+        data.forEach(item => {
+          getCompanyProfile(item.symbol, companyProfile => {
+            allProfiles.push(companyProfile.profile.ceo);
+          });
+        });
+        console.log("CEOs")
+        console.log(allProfiles);
+        console.log("Length")
+        console.log(Object.keys(allProfiles).length);
+      }
+
+      async function getCompanyProfile(companySymbol, callback) {
+        let response = await fetch(
+          `https://financialmodelingprep.com/api/v3/company/profile/${companySymbol}`
+        );
+        let data = await response.json();
+        callback(data);
+      }
+    </script>
+  </body>
+</html>
