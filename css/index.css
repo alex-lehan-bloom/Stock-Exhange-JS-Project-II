@@ -29,12 +29,6 @@ body {
 .form-control {
   border-color: black;
 }
-/* .btn {
-  margin-right: 20px;
-  background-color: #383838;
-  color: white;
-  border-color: black;
-} */
 .btn:hover {
   pointer-events: none;
 }
