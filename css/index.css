@@ -21,16 +21,12 @@ body {
   justify-content: center;
 }
 .form-control,
-.btn,
 .list-group {
   /* width: 250px; */
   margin-top: 20px;
 }
 .form-control {
-  border-color: black;
-}
-.btn:hover {
-  pointer-events: none;
+  border: 1px solid black;
 }
 
 .link-margin {
@@ -46,4 +42,11 @@ body {
 }
 .hide-element {
   display: none;
+}
+.alert {
+  margin-top: 20px;
+  text-align: center;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }

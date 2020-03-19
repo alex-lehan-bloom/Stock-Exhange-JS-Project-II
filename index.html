@@ -25,12 +25,15 @@
             <h1>Search Nasdaq Stocks</h1>
           </div>
           <div class="input-group">
-            <input id="searchBar" type="text" class="form-control" />
-            <div class="input-group-append">
-              <button type="button" id="searchButton" class="btn  btn-dark">
-                Search
-              </button>
-            </div>
+            <input
+              id="searchBar"
+              type="text"
+              class="form-control"
+              placeholder="search"
+            />
+          </div>
+          <div id="searchAlert" class="alert alert-danger" role="alert">
+            Your search returned 0 results
           </div>
           <ul id="searchResults" class="list-group list-group-flush"></ul>
         </div>

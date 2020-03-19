@@ -16,7 +16,7 @@
       console.log(newObjects);
 
       let newArray = [];
-      newArray.push([{ name: "test" }]);
+      newArray.push({ name: "test" });
       console.log(newArray.length);
 
       search();
@@ -28,21 +28,36 @@
         let allProfiles = [];
         data.forEach(item => {
           getCompanyProfile(item.symbol, companyProfile => {
-            allProfiles.push(companyProfile.profile.ceo);
+            console.log(companyProfile);
+            allProfiles.push(companyProfile);
+            callback(allProfiles);
+
           });
         });
-        console.log("CEOs")
-        console.log(allProfiles);
-        console.log("Length")
-        console.log(Object.keys(allProfiles).length);
+
+        // allProfiles.map(item => {
+        //   console.log(item);
+        // });
+        console.log("Length");
+        console.log(allProfiles.length);
+      }
+
+      function createProfileList(companyProfile){
+
       }
 
       async function getCompanyProfile(companySymbol, callback) {
         let response = await fetch(
           `https://financialmodelingprep.com/api/v3/company/profile/${companySymbol}`
         );
-        let data = await response.json();
-        callback(data);
+        let companyProfile = await response.json();
+        // console.log(typeof data);
+        // allProfiles.push(data);
+        // console.log("Profiles");
+        // console.log(allProfiles);
+        // console.log(allProfiles[0]);
+        // console.log(companyProfile);
+        callback(companyProfile);
       }
     </script>
   </body>
