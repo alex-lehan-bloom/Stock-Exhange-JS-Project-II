@@ -6,32 +6,57 @@ body {
 .content {
   display: flex;
   justify-content: center;
-  margin-left: 250px;
+  margin-left: 150px;
 }
 
 .search-container {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  width: 500px;
-  white-space: nowrap;
+  width: 700px;
 }
 .header {
   display: flex;
   justify-content: center;
 }
-.form-control,
-.list-group {
-  /* width: 250px; */
-  margin-top: 20px;
-}
+
 .form-control {
   border: 1px solid black;
+  margin-top: 15px;
 }
 
 .link-margin {
   margin-right: 10px;
 }
+
+.list-group {
+  margin-top: 20px;
+}
+.list-group .list-group-item {
+  padding: 12px 5px 12px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-group .list-group-item .company-image {
+  max-height: 50px;
+}
+.list-group .list-group-item .company-name {
+  font-size: 20px;
+  margin: 0 8px 0 8px;
+}
+
+.list-group .list-group-item .company-symbol {
+  margin-right: 8px;
+  color: gray;
+}
+.list-group .list-group-item .stock-up {
+  color: #2ecc71;
+}
+.list-group .list-group-item .stock-down {
+  color: #e74c3c;
+}
+
 .spinner-border {
   display: none;
   margin-left: 20px;

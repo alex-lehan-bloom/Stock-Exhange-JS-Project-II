@@ -4,7 +4,9 @@ function searchIfSymbolInURL() {
   let symbol = urlParams.get("symbol");
   if (symbol !== null) {
     search(symbol, data => {
-      displaySearchResults(data);
+      getCompanyProfile(data, listOfCompanyProfiles => {
+        displaySearchResults(listOfCompanyProfiles);
+      });
     });
     let searchBar = document.getElementById("searchBar");
     searchBar.value = symbol;
@@ -18,48 +20,79 @@ searchBar.onkeyup = debounce(() => {
   if (searchQuery.length === 0) {
     let ul = document.getElementById("searchResults");
     ul.textContent = "";
+    let url = window.location.href.split("?")[0];
+    window.history.pushState({ path: url }, "", url);
   } else {
     search(searchQuery, data => {
-      displaySearchResults(data);
+      getCompanyProfile(data, listOfCompanyProfiles => {
+        displaySearchResults(listOfCompanyProfiles);
+      });
     });
   }
 }, 400);
 
 async function search(searchQuery, callback) {
+  hideSearchAlert();
   showSpinner();
   let response = await fetch(
     `https://financialmodelingprep.com/api/v3/search?query=${searchQuery}&limit=10&exchange=NASDAQ`
   );
   let data = await response.json();
+  let listOfCompanySymbols = data.map(searchResponse => {
+    return searchResponse.symbol;
+  });
+  callback(listOfCompanySymbols);
   let urlParams = new URLSearchParams(window.location.search);
   urlParams.set("symbol", searchQuery);
   let url = window.location.href.split("?")[0] + "?" + urlParams;
   window.history.pushState({ path: url }, "", url);
-  callback(data);
 }
 
-function displaySearchResults(data) {
-  let ul = document.getElementById("searchResults");
-  ul.textContent = "";
-  hideSearchAlert();
-  if (data.length === 0) {
+async function getCompanyProfile(listOfCompanySymbols, callback) {
+  let searchResults = document.getElementById("searchResults");
+  searchResults.textContent = "";
+  let listOfCompanyProfiles = [];
+  for (let symbol of listOfCompanySymbols) {
+    let response = await fetch(
+      `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
+    );
+    let data = await response.json();
+    listOfCompanyProfiles.push(data);
+  }
+  callback(listOfCompanyProfiles);
+}
+
+function displaySearchResults(listOfCompanyProfiles) {
+  if (listOfCompanyProfiles.length === 0) {
     showSearchAlert();
   } else {
-    for (i = 0; i < data.length; i++) {
-      let companyName = document.createElement("a");
-      companyName.target = "_blank";
-      companyName.href = `./company.html?symbol=${data[i].symbol}`;
-      companyName.textContent = `${data[i].name}`;
-      companyName.classList.add("link-margin");
-      let companySymbol = document.createElement("a");
-      companySymbol.target = "_blank";
-      companySymbol.href = `./company.html?symbol=${data[i].symbol}`;
-      companySymbol.textContent = `${data[i].symbol}`;
-      let li = document.createElement("li");
-      li.classList.add("list-group-item");
-      li.append(companyName, companySymbol);
-      ul.append(li);
-    }
+    listOfCompanyProfiles.map(profile => {
+      if (Object.keys(profile).length !== 0) {
+        let img = document.createElement("img");
+        img.src = profile.profile.image;
+        img.classList.add("company-image");
+        let name = document.createElement("a");
+        name.href = `./company.html?symbol=${profile.symbol}`;
+        name.classList.add("company-name");
+        name.textContent = profile.profile.companyName;
+        let symbol = document.createElement("span");
+        symbol.classList.add("company-symbol");
+        symbol.textContent = `(${profile.symbol})`;
+        let stockUpOrDown = document.createElement("span");
+        if (profile.profile.changesPercentage !== null) {
+          stockUpOrDown.textContent = profile.profile.changesPercentage;
+          if (profile.profile.changesPercentage.includes("+") === true) {
+            stockUpOrDown.classList.add("stock-up");
+          } else {
+            stockUpOrDown.classList.add("stock-down");
+          }
+        }
+        let li = document.createElement("li");
+        li.classList.add("list-group-item");
+        li.append(img, name, symbol, stockUpOrDown);
+        searchResults.append(li);
+      }
+    });
   }
   hideSpinner();
 }
@@ -86,13 +119,6 @@ function hideSearchAlert() {
   let alert = document.getElementById("searchAlert");
   alert.classList.remove("display-element");
   alert.classList.add("hide-element");
-}
-
-async function getCompanyProfile(symbol) {
-  let response = await fetch(
-    `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
-  );
-  let data = await response.json();
 }
 
 function debounce(cb, interval, immediate) {
