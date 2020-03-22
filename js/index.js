@@ -34,66 +34,90 @@ searchBar.onkeyup = debounce(() => {
 async function search(searchQuery, callback) {
   hideSearchAlert();
   showSpinner();
+  let searchResults = document.getElementById("searchResults");
+  searchResults.textContent = "";
   let response = await fetch(
     `https://financialmodelingprep.com/api/v3/search?query=${searchQuery}&limit=10&exchange=NASDAQ`
   );
   let data = await response.json();
-  let listOfCompanySymbols = data.map(searchResponse => {
-    return searchResponse.symbol;
-  });
-  callback(listOfCompanySymbols);
+  if (data.length === 0) {
+    showSearchAlert();
+    hideSpinner();
+  } else {
+    let listOfCompanySymbols = data.map(searchResponse => {
+      return searchResponse.symbol;
+    });
+    callback(listOfCompanySymbols);
+  }
   let urlParams = new URLSearchParams(window.location.search);
   urlParams.set("symbol", searchQuery);
   let url = window.location.href.split("?")[0] + "?" + urlParams;
   window.history.pushState({ path: url }, "", url);
 }
 
-async function getCompanyProfile(listOfCompanySymbols, callback) {
-  let searchResults = document.getElementById("searchResults");
-  searchResults.textContent = "";
-  let listOfCompanyProfiles = [];
-  for (let symbol of listOfCompanySymbols) {
-    let response = await fetch(
-      `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
-    );
-    let data = await response.json();
-    listOfCompanyProfiles.push(data);
+function getCompanyProfile(listOfCompanySymbols, callback) {
+  let arrayOfFetchRequests = [];
+  let symbolsForFetchRequest = [];
+  let finalIndexPosition = 2;
+  for (let i = 0; i < listOfCompanySymbols.length; i++) {
+    if (i <= finalIndexPosition) {
+      symbolsForFetchRequest.push(listOfCompanySymbols[i]);
+    } else {
+      symbolsForFetchRequest = [listOfCompanySymbols[i]];
+      finalIndexPosition += 3;
+    }
+    if (
+      symbolsForFetchRequest.length === 3 ||
+      i === listOfCompanySymbols.length - 1
+    ) {
+      arrayOfFetchRequests.push(
+        `https://financialmodelingprep.com/api/v3/company/profile/${symbolsForFetchRequest[0]},
+        ${symbolsForFetchRequest[1]},
+        ${symbolsForFetchRequest[2]}`
+      );
+    }
   }
-  callback(listOfCompanyProfiles);
+  Promise.all(
+    arrayOfFetchRequests.map(url =>
+      fetch(url).then(response => response.json())
+    )
+  ).then(data => {
+    // console.log(data);
+    console.log(data[0]);
+    for (let i = 0; i < data.length; i++) {
+      callback(data[i].companyProfiles);
+    }
+  });
 }
 
 function displaySearchResults(listOfCompanyProfiles) {
-  if (listOfCompanyProfiles.length === 0) {
-    showSearchAlert();
-  } else {
-    listOfCompanyProfiles.map(profile => {
-      if (Object.keys(profile).length !== 0) {
-        let img = document.createElement("img");
-        img.src = profile.profile.image;
-        img.classList.add("company-image");
-        let name = document.createElement("a");
-        name.href = `./company.html?symbol=${profile.symbol}`;
-        name.classList.add("company-name");
-        name.textContent = profile.profile.companyName;
-        let symbol = document.createElement("span");
-        symbol.classList.add("company-symbol");
-        symbol.textContent = `(${profile.symbol})`;
-        let stockUpOrDown = document.createElement("span");
-        if (profile.profile.changesPercentage !== null) {
-          stockUpOrDown.textContent = profile.profile.changesPercentage;
-          if (profile.profile.changesPercentage.includes("+") === true) {
-            stockUpOrDown.classList.add("stock-up");
-          } else {
-            stockUpOrDown.classList.add("stock-down");
-          }
+  listOfCompanyProfiles.map(profile => {
+    if (Object.keys(profile).length !== 0) {
+      let img = document.createElement("img");
+      img.src = profile.profile.image;
+      img.classList.add("company-image");
+      let name = document.createElement("a");
+      name.href = `./company.html?symbol=${profile.symbol}`;
+      name.classList.add("company-name");
+      name.textContent = profile.profile.companyName;
+      let symbol = document.createElement("span");
+      symbol.classList.add("company-symbol");
+      symbol.textContent = `(${profile.symbol})`;
+      let stockUpOrDown = document.createElement("span");
+      if (profile.profile.changesPercentage !== null) {
+        stockUpOrDown.textContent = profile.profile.changesPercentage;
+        if (profile.profile.changesPercentage.includes("+") === true) {
+          stockUpOrDown.classList.add("stock-up");
+        } else {
+          stockUpOrDown.classList.add("stock-down");
         }
-        let li = document.createElement("li");
-        li.classList.add("list-group-item");
-        li.append(img, name, symbol, stockUpOrDown);
-        searchResults.append(li);
       }
-    });
-  }
+      let li = document.createElement("li");
+      li.classList.add("list-group-item");
+      li.append(img, name, symbol, stockUpOrDown);
+      searchResults.append(li);
+    }
+  });
   hideSpinner();
 }
 
@@ -130,9 +154,7 @@ function debounce(cb, interval, immediate) {
       timeout = null;
       if (!immediate) cb.apply(context, args);
     };
-
     let callNow = immediate && !timeout;
-
     clearTimeout(timeout);
     timeout = setTimeout(later, interval);
 
