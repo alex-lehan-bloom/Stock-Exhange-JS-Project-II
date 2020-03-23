@@ -1,6 +1,6 @@
 class Marquee {
-  constructor(marquee) {
-    this.marquee = marquee;
+  constructor(element) {
+    this.marquee = element;
   }
 
   async createMarque() {
@@ -13,7 +13,6 @@ class Marquee {
       stockInfoForMarquee.push(data.stockList[i].symbol);
       stockInfoForMarquee.push(`$${data.stockList[i].price.toString()}`);
     }
-    // let marquee = document.getElementById("marquee");
     let symboleIndex = 0;
     let priceIndex = 1;
     for (let i = 0; i < stockInfoForMarquee.length / 2; i++) {
@@ -24,7 +23,7 @@ class Marquee {
       price.textContent = stockInfoForMarquee[priceIndex];
       let divWithStockAndPrice = document.createElement("div");
       divWithStockAndPrice.append(symbol, price);
-      marquee.append(divWithStockAndPrice);
+      this.marquee.append(divWithStockAndPrice);
       symboleIndex += 2;
       priceIndex += 2;
     }
