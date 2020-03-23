@@ -5,6 +5,7 @@ body {
   color: #383838;
   background-color: #fffefe;
 }
+
 .main {
   min-height: 665px;
   width: 1000px;
@@ -20,4 +21,3 @@ body {
   box-shadow: 0 0 20px rgb(173, 169, 169);
   background-color: white;
 }
-

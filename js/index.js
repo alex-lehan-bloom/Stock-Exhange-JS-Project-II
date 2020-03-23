@@ -82,8 +82,6 @@ function getCompanyProfile(listOfCompanySymbols, callback) {
       fetch(url).then(response => response.json())
     )
   ).then(data => {
-    // console.log(data);
-    console.log(data[0]);
     for (let i = 0; i < data.length; i++) {
       callback(data[i].companyProfiles);
     }

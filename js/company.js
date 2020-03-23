@@ -83,7 +83,6 @@ function createGraph(data) {
   if (startDateOfStock > year.toString()) {
     year = parseInt(startDateOfStock);
   }
-  console.log(chart);
   for (i = 0; i < data.historical.length; i++) {
     if (data.historical[i].date.slice(0, 4) === year.toString()) {
       chart.data.labels.push(year);
