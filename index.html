@@ -23,37 +23,19 @@
     <div class="main-container">
       <div class="main">
         <div class="content">
-          <div class="search-container">
-            <div class="header">
-              <h1>Search Nasdaq Stocks</h1>
-            </div>
-            <div class="input-group">
-              <input
-                id="searchBar"
-                type="text"
-                class="form-control"
-                placeholder="search"
-              />
-            </div>
-            <div
-              id="searchAlert"
-              class="alert alert-danger hide-element"
-              role="alert"
-            >
-              Your search returned 0 results
-            </div>
+          <div id="searchContainer" class="search-container">
+            <h1 class="header">Search Nasdaq Stocks</h1>
+            <div id="search" class="search"></div>
             <ul id="searchResults" class="list-group list-group-flush"></ul>
           </div>
         </div>
-        <div
-          id="spinner"
-          class="spinner-border input-group-append"
-          role="status"
-        ></div>
+        <div id="spinner"></div>
       </div>
     </div>
     <script src="https://use.fontawesome.com/7ae230e47f.js"></script>
     <script src="js/marquee.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/searchForm.js"></script>
+    <script src="js/searchResults.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
