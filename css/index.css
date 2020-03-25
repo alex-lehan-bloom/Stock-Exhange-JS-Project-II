@@ -38,19 +38,21 @@
   margin-top: 20px;
   width: 700px;
 }
+
+.search-container .header {
+  text-align: center;
+}
 .search-container .search {
   display: flex;
   justify-content: center;
   flex-direction: column;
 }
-.search-container .header {
-  text-align: center;
-}
 
-.form-control {
+.search-container .form-control {
   border: 1px solid black;
   margin-top: 15px;
 }
+
 
 .link-margin {
   margin-right: 10px;

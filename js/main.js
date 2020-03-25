@@ -11,6 +11,8 @@ let results = new SearchResults(
 searchForm.searchIfSymbolInURL(companies => {
   results.displaySearchResults(companies);
 });
-searchForm.onSearch(companies => {
-  results.displaySearchResults(companies);
+searchForm.onSearch((companies, userInput) => {
+  console.log("Inside main.js");
+  console.log(userInput);
+  results.displaySearchResults(companies, userInput);
 });

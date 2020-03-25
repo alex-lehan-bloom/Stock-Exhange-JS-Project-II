@@ -3,7 +3,8 @@ class SearchResults {
     this.searchResults = searchResults;
     this.spinner = spinner;
   }
-  displaySearchResults(listOfCompanyProfiles) {
+  displaySearchResults(listOfCompanyProfiles, userInput) {
+    this.userInput = userInput;
     listOfCompanyProfiles.map(profile => {
       let img = document.createElement("img");
       img.src = profile.profile.image;
@@ -11,10 +12,15 @@ class SearchResults {
       let name = document.createElement("a");
       name.href = `./company.html?symbol=${profile.symbol}`;
       name.classList.add("company-name");
+      name.target = "_blank";
       name.textContent = profile.profile.companyName;
+      let highlightName = new Mark(name);
+      highlightName.mark(userInput);
       let symbol = document.createElement("span");
       symbol.classList.add("company-symbol");
       symbol.textContent = `(${profile.symbol})`;
+      let highlightSymbol = new Mark(symbol);
+      highlightSymbol.mark(userInput);
       let stockUpOrDown = document.createElement("span");
       if (profile.profile.changesPercentage !== null) {
         stockUpOrDown.textContent = profile.profile.changesPercentage;

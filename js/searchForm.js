@@ -40,7 +40,7 @@ class SearchForm {
       } else {
         this.search(this.searchQuery, data => {
           this.getCompanyProfile(data, listOfCompanyProfiles => {
-            callback(listOfCompanyProfiles);
+            callback(listOfCompanyProfiles, this.searchBar.value);
           });
         });
       }
