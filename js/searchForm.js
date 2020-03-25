@@ -23,7 +23,7 @@ class SearchForm {
     if (this.symbol !== null) {
       this.search(this.symbol, data => {
         this.getCompanyProfile(data, listOfCompanyProfiles => {
-          callback(listOfCompanyProfiles);
+          callback(listOfCompanyProfiles, this.searchBar.value);
         });
       });
       this.searchBar.value = this.symbol;

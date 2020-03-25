@@ -53,7 +53,6 @@
   margin-top: 15px;
 }
 
-
 .link-margin {
   margin-right: 10px;
 }
@@ -63,6 +62,11 @@
 }
 .list-group .list-group-item {
   padding: 12px 5px 12px 5px;
+  display: flex;
+  align-items: center;
+}
+.list-group .list-group-item .main-list-content {
+  max-width: calc(100% - 100px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -78,6 +82,15 @@
 .list-group .list-group-item .company-symbol {
   margin-right: 8px;
   color: gray;
+}
+.list-group .list-group-item .btn {
+  margin-left: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: rgb(236, 231, 231);
+}
+.list-group .list-group-item .btn:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: rgb(255, 255, 255);
 }
 .spinner-border {
   display: none;

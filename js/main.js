@@ -8,11 +8,9 @@ let results = new SearchResults(
   document.getElementById("searchResults"),
   document.getElementById("spinner")
 );
-searchForm.searchIfSymbolInURL(companies => {
-  results.displaySearchResults(companies);
+searchForm.searchIfSymbolInURL((companies, userInput) => {
+  results.displaySearchResults(companies, userInput);
 });
 searchForm.onSearch((companies, userInput) => {
-  console.log("Inside main.js");
-  console.log(userInput);
   results.displaySearchResults(companies, userInput);
 });
