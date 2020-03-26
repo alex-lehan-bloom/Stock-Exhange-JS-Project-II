@@ -24,6 +24,3 @@ class Marquee {
     }
   }
 }
-
-let mainPageMarquee = new Marquee(document.getElementById("marquee"));
-mainPageMarquee.createMarque();

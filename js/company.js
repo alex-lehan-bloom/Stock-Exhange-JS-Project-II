@@ -46,12 +46,12 @@ class Company {
     logo.src = companyInfo.profile.image;
     let name = document.createElement("h1");
     name.classList.add("company-name");
-    name.innerText = companyInfo.profile.companyName;
+    name.textContent = companyInfo.profile.companyName;
     let industry = document.createElement("p");
-    industry.innerText = `(${companyInfo.profile.industry})`;
+    industry.textContent = `(${companyInfo.profile.industry})`;
     let website = document.createElement("a");
     website.classList.add("website+");
-    website.innerText = companyInfo.profile.website;
+    website.textContent = companyInfo.profile.website;
     website.href = companyInfo.profile.website;
     website.target = "_blank";
     this.content.prepend(header);
@@ -77,7 +77,7 @@ class Company {
     price.classList.add("stock-price");
     price.textContent = `$${companyInfo.profile.price}`;
     let stockUpOrDown = document.createElement("span");
-    stockUpOrDown.innerText = `${companyInfo.profile.changesPercentage}`;
+    stockUpOrDown.textContent = `${companyInfo.profile.changesPercentage}`;
     if (companyInfo.profile.changesPercentage.includes("+") === true) {
       stockUpOrDown.classList.add("stock-up");
     } else {
@@ -90,7 +90,7 @@ class Company {
   setDescription(mainContentContainer, companyInfo) {
     let description = document.createElement("p");
     description.classList.add("description");
-    description.innerText = companyInfo.profile.description;
+    description.textContent = companyInfo.profile.description;
     mainContentContainer.append(description);
   }
 

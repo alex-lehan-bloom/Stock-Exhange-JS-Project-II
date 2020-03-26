@@ -5,11 +5,15 @@ class SearchResults {
   }
 
   displaySearchResults(listOfCompanyProfiles, userInput) {
+    console.log(listOfCompanyProfiles);
     this.userInput = userInput;
     listOfCompanyProfiles.map(profile => {
       let img = document.createElement("img");
       img.src = profile.profile.image;
       img.classList.add("company-image");
+      img.addEventListener("error", () => {
+        img.removeAttribute("src");
+      });
       let name = document.createElement("a");
       name.href = `./company.html?symbol=${profile.symbol}`;
       name.classList.add("company-name");
