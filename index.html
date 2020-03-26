@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bloom | Stock Exchange</title>
     <link rel="shortcut icon" type="image/png" href="images/favicon.png" />
-  
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -20,8 +23,12 @@
     <div id="marquee" class="marquee"></div>
     <div class="main-container">
       <div class="main">
-        <div class="content">
+        <div>
           <div id="searchContainer" class="search-container">
+            <div id="compare" class="compare">
+              <div id="companiesToCompare"></div>
+              <a id="openCompanyComparisonPage" class="compare-text">Compare</a>
+            </div>
             <h1 class="header">Search Nasdaq Stocks</h1>
             <div id="search" class="search"></div>
             <ul id="searchResults" class="list-group list-group-flush"></ul>
