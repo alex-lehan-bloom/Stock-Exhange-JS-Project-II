@@ -14,32 +14,9 @@
     <link rel="stylesheet" href="css/company.css" />
   </head>
   <body>
-    <div class="main">
-      <div id="companyInfo" class="company-info">
-        <div class="row">
-          <div class="col-3">
-            <img id="companyLogo" class="company-logo" />
-          </div>
-          <div class="col-6">
-            <h1 id="companyName" class="company-name"></h1>
-          </div>
-          <div class="col-3">
-            <p id="companyIndustry"></p>
-          </div>
-        </div>
-        <a id="website" class="website"></a>
-      </div>
-      <div class="main-content">
-        <div class="stock-info">
-          <h3>Stock Price:</h3>
-          <span id="stockPrice" class="stock-price"></span>
-          <span id="stockUpDown"></span>
-        </div>
-        <p id="description" class="description"></p>
-        <canvas id="stockHistory" class="chart"></canvas>
-      </div>
-    </div>
+    <div id="main" class="main"></div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="js/company.js"></script>
+    <script src="js/company-main.js"></script>
   </body>
 </html>

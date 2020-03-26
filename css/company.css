@@ -9,7 +9,7 @@ body {
   text-align: center;
 }
 
-.company-info {
+.header {
   border-bottom: 2px solid black;
   min-height: 100px;
   height: auto;
@@ -17,19 +17,19 @@ body {
   width: 100%;
 }
 
-.company-info .row .col-3 {
+.header .row .col-3 {
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.company-info .row .col-6 {
+.header .row .col-6 {
   padding: 0px 5px 0px 5px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.company-info .company-logo {
+.header .company-logo {
   max-height: 100px;
   width: auto;
 }
