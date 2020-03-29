@@ -48,12 +48,12 @@ class SearchResults {
       this.li.classList.add("list-group-item");
       this.li.append(mainListContent, compareButton);
       this.searchResults.append(this.li);
-      this.addCompanyToCompareWhenClicked(profile, compareButton);
+      this.addCompanyToCompare(profile, compareButton);
     });
     this.hideSpinner();
   }
 
-  addCompanyToCompareWhenClicked(profile, compareButton) {
+  addCompanyToCompare(profile, compareButton) {
     this.li.append(compareButton);
     compareButton.addEventListener("click", () => {
       let companiesToCompare = document.getElementById("companiesToCompare");
@@ -67,7 +67,7 @@ class SearchResults {
         companyToCompare.append(compareCompanyName, cancelIcon);
         companiesToCompare.append(companyToCompare);
         this.companiesToCompare.push(profile.symbol);
-        this.removeCompanyToCompareWhenClicked(profile, companyToCompare);
+        this.removeCompanyToCompare(profile, companyToCompare);
       }
       this.openCompanyComparisonPage.textContent = "";
       this.openCompanyComparisonPage.href = `./company.html?symbol=`;
@@ -86,7 +86,7 @@ class SearchResults {
     });
   }
 
-  removeCompanyToCompareWhenClicked(profile, companyToCompare) {
+  removeCompanyToCompare(profile, companyToCompare) {
     companyToCompare.addEventListener("click", () => {
       companyToCompare.remove();
       this.openCompanyComparisonPage.textContent = "";

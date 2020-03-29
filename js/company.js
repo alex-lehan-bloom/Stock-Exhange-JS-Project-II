@@ -3,6 +3,7 @@ class Company {
     this.allContent = element;
     this.symbols = symbol.split(",");
   }
+
   load() {
     for (let i = 0; i < this.symbols.length; i++) {
       this.getCompanyProfile(
@@ -25,7 +26,7 @@ class Company {
       );
     }
   }
-
+  
   async getCompanyProfile(symbol, callback) {
     let response = await fetch(
       `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
