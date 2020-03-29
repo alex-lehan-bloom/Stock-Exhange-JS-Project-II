@@ -1,6 +1,7 @@
-body {
+.companies-to-compare {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .main {
   width: 850px;

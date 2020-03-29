@@ -1,21 +1,29 @@
 class Company {
   constructor(element, symbol) {
-    this.content = element;
-    this.symbol = symbol;
+    this.allContent = element;
+    this.symbols = symbol.split(",");
   }
   load() {
-    this.getCompanyProfile(this.symbol, companyInfo => {
-      this.createHeader(header => {
-        this.setHeaderInfo(header, companyInfo);
-      });
-      this.createMainContentContainer(mainContentContainer => {
-        this.setStockPrice(mainContentContainer, companyInfo);
-        this.setDescription(mainContentContainer, companyInfo);
-        this.getStockPriceHistory(this.symbol, stockHistory => {
-          this.createGraph(mainContentContainer, stockHistory);
-        });
-      });
-    });
+    for (let i = 0; i < this.symbols.length; i++) {
+      this.getCompanyProfile(
+        this.symbols[i],
+        (companyInfo, companyContainer) => {
+          this.createHeader(companyContainer, header => {
+            this.setHeaderInfo(header, companyInfo);
+          });
+          this.createMainContentContainer(
+            companyContainer,
+            mainContentContainer => {
+              this.setStockPrice(mainContentContainer, companyInfo);
+              this.setDescription(mainContentContainer, companyInfo);
+              this.getStockPriceHistory(this.symbols[i], stockHistory => {
+                this.createGraph(mainContentContainer, stockHistory);
+              });
+            }
+          );
+        }
+      );
+    }
   }
 
   async getCompanyProfile(symbol, callback) {
@@ -23,12 +31,31 @@ class Company {
       `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
     );
     let companyInfo = await response.json();
-    callback(companyInfo);
+    callback(companyInfo, this.createCompanyContainer());
   }
 
-  createHeader(callback) {
+  createCompanyContainer() {
+    if (this.symbols.length > 1) {
+      let numberOfCompany = document.createElement("h1");
+      if (this.allContent.childElementCount === 0) {
+        numberOfCompany.textContent = "Company 1:";
+      } else if (this.allContent.childElementCount === 2) {
+        numberOfCompany.textContent = "Company 2:";
+      } else {
+        numberOfCompany.textContent = "Company 3:";
+      }
+      this.allContent.append(numberOfCompany);
+    }
+    let companyContainer = document.createElement("div");
+    companyContainer.classList.add("main");
+    this.allContent.append(companyContainer);
+    return companyContainer;
+  }
+
+  createHeader(companyContainer, callback) {
     let header = document.createElement("div");
     header.classList.add("header");
+    companyContainer.prepend(header);
     callback(header);
   }
 
@@ -54,7 +81,6 @@ class Company {
     website.textContent = companyInfo.profile.website;
     website.href = companyInfo.profile.website;
     website.target = "_blank";
-    this.content.prepend(header);
     header.append(row);
     row.append(firstColumn, secondColumn, thirdColumn);
     firstColumn.append(logo);
@@ -63,10 +89,10 @@ class Company {
     header.append(website);
   }
 
-  createMainContentContainer(callback) {
+  createMainContentContainer(companyContainer, callback) {
     let mainContent = document.createElement("div");
     mainContent.classList.add("main-content");
-    this.content.append(mainContent);
+    companyContainer.append(mainContent);
     callback(mainContent);
   }
 

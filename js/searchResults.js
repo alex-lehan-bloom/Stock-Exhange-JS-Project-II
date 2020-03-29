@@ -41,65 +41,78 @@ class SearchResults {
       let compareButton = document.createElement("button");
       compareButton.classList.add("btn");
       compareButton.textContent = "Compare";
-      compareButton.addEventListener("click", () => {
-        let companiesToCompare = document.getElementById("companiesToCompare");
-        if (companiesToCompare.querySelectorAll(".btn").length < 3) {
-          let compareCompanyName = document.createElement("span");
-          compareCompanyName.textContent = profile.symbol;
-          let cancelIcon = document.createElement("span");
-          cancelIcon.classList.add("fa", "fa-close");
-          let companyToCompare = document.createElement("button");
-          companyToCompare.classList.add("btn");
-          companyToCompare.addEventListener("click", () => {
-            this.openCompanyComparisonPage.textContent = "";
-            companyToCompare.remove();
-            for (let i = 0; i < this.companiesToCompare.length; i++) {
-              if (profile.symbol === this.companiesToCompare[i]) {
-                this.companiesToCompare.splice(i);
-              }
-              if (this.companiesToCompare.length === 1) {
-                this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} company`;
-              } else {
-                this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} companies`;
-              }
-            }
-            this.openCompanyComparisonPage.href = `./company.html?symbol=`;
-            for (let i = 0; i < this.companiesToCompare.length; i++) {
-              if (this.companiesToCompare.length === 1) {
-                this.openCompanyComparisonPage.href += `${this.companiesToCompare[i]}`;
-              } else {
-                this.openCompanyComparisonPage.href += `,${this.companiesToCompare[i]}`;
-              }
-            }
-          });
-          companyToCompare.append(compareCompanyName, cancelIcon);
-          companiesToCompare.append(companyToCompare);
-          this.companiesToCompare.push(profile.symbol);
-        }
-        this.openCompanyComparisonPage.textContent = "";
-        this.openCompanyComparisonPage.href = `./company.html?symbol=`;
-        for (let i = 0; i < this.companiesToCompare.length; i++) {
-          if (i === 0) {
-            this.openCompanyComparisonPage.href += `${this.companiesToCompare[i]}`;
-          } else {
-            this.openCompanyComparisonPage.href += `,${this.companiesToCompare[i]}`;
-          }
+      let mainListContent = document.createElement("div");
+      mainListContent.classList.add("main-list-content");
+      mainListContent.append(img, name, symbol, stockUpOrDown);
+      this.li = document.createElement("li");
+      this.li.classList.add("list-group-item");
+      this.li.append(mainListContent, compareButton);
+      this.searchResults.append(this.li);
+      this.addCompanyToCompareWhenClicked(profile, compareButton);
+    });
+    this.hideSpinner();
+  }
+
+  addCompanyToCompareWhenClicked(profile, compareButton) {
+    this.li.append(compareButton);
+    compareButton.addEventListener("click", () => {
+      let companiesToCompare = document.getElementById("companiesToCompare");
+      if (companiesToCompare.querySelectorAll(".btn").length < 3) {
+        let compareCompanyName = document.createElement("span");
+        compareCompanyName.textContent = profile.symbol;
+        let cancelIcon = document.createElement("span");
+        cancelIcon.classList.add("fa", "fa-close");
+        let companyToCompare = document.createElement("button");
+        companyToCompare.classList.add("btn");
+        companyToCompare.append(compareCompanyName, cancelIcon);
+        companiesToCompare.append(companyToCompare);
+        this.companiesToCompare.push(profile.symbol);
+        this.removeCompanyToCompareWhenClicked(profile, companyToCompare);
+      }
+      this.openCompanyComparisonPage.textContent = "";
+      this.openCompanyComparisonPage.href = `./company.html?symbol=`;
+      for (let i = 0; i < this.companiesToCompare.length; i++) {
+        if (i === 0) {
+          this.openCompanyComparisonPage.href += `${this.companiesToCompare[i]}`;
+        } else {
+          this.openCompanyComparisonPage.href += `,${this.companiesToCompare[i]}`;
         }
         if (this.companiesToCompare.length === 1) {
           this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} company`;
         } else {
           this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} companies`;
         }
-      });
-      let mainListContent = document.createElement("div");
-      mainListContent.classList.add("main-list-content");
-      mainListContent.append(img, name, symbol, stockUpOrDown);
-      let li = document.createElement("li");
-      li.classList.add("list-group-item");
-      li.append(mainListContent, compareButton);
-      this.searchResults.append(li);
+      }
     });
-    this.hideSpinner();
+  }
+
+  removeCompanyToCompareWhenClicked(profile, companyToCompare) {
+    companyToCompare.addEventListener("click", () => {
+      companyToCompare.remove();
+      this.openCompanyComparisonPage.textContent = "";
+      this.openCompanyComparisonPage.href = `./company.html?symbol=`;
+      for (let i = 0; i < this.companiesToCompare.length; i++) {
+        console.log(this.companiesToCompare.length);
+        console.log(this.companiesToCompare);
+        if (profile.symbol === this.companiesToCompare[i]) {
+          this.companiesToCompare.splice(i);
+        }
+        if (this.companiesToCompare.length === 0) {
+          this.openCompanyComparisonPage.textContent = "Compare companies";
+        } else if (this.companiesToCompare.length === 1) {
+          this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} company`;
+        } else {
+          this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} companies`;
+        }
+        if (this.companiesToCompare.length === 0) {
+          this.openCompanyComparisonPage.removeAttribute("href");
+        } else if (this.companiesToCompare.length === 1) {
+          this.openCompanyComparisonPage.href += `${this.companiesToCompare[i]}`;
+        } else {
+          this.openCompanyComparisonPage.href += `,${this.companiesToCompare[i]}`;
+        }
+      }
+    });
   }
 
   hideSpinner() {
