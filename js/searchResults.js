@@ -64,8 +64,6 @@ class SearchResults {
               }
             }
             this.openCompanyComparisonPage.href = `./company.html?symbol=`;
-            console.log("length");
-            console.log(this.companiesToCompare.length);
             for (let i = 0; i < this.companiesToCompare.length; i++) {
               if (this.companiesToCompare.length === 1) {
                 this.openCompanyComparisonPage.href += `${this.companiesToCompare[i]}`;
@@ -78,7 +76,6 @@ class SearchResults {
           companiesToCompare.append(companyToCompare);
           this.companiesToCompare.push(profile.symbol);
         }
-        console.log(this.companiesToCompare);
         this.openCompanyComparisonPage.textContent = "";
         this.openCompanyComparisonPage.href = `./company.html?symbol=`;
         for (let i = 0; i < this.companiesToCompare.length; i++) {
