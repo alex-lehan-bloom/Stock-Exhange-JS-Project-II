@@ -11,8 +11,9 @@ class SearchResults {
   displaySearchResults(listOfCompanyProfiles, userInput) {
     this.userInput = userInput;
     listOfCompanyProfiles.map(profile => {
+      let { image, companyName, changesPercentage } = profile.profile;
       let img = document.createElement("img");
-      img.src = profile.profile.image;
+      img.src = image;
       img.classList.add("company-image");
       img.addEventListener("error", () => {
         img.removeAttribute("src");
@@ -21,7 +22,7 @@ class SearchResults {
       name.href = `./company.html?symbol=${profile.symbol}`;
       name.classList.add("company-name");
       name.target = "_blank";
-      name.textContent = profile.profile.companyName;
+      name.textContent = companyName;
       let highlightName = new Mark(name);
       highlightName.mark(userInput);
       let symbol = document.createElement("span");
@@ -30,9 +31,9 @@ class SearchResults {
       let highlightSymbol = new Mark(symbol);
       highlightSymbol.mark(userInput);
       let stockUpOrDown = document.createElement("span");
-      if (profile.profile.changesPercentage !== null) {
-        stockUpOrDown.textContent = profile.profile.changesPercentage;
-        if (profile.profile.changesPercentage.includes("+") === true) {
+      if (changesPercentage !== null) {
+        stockUpOrDown.textContent = changesPercentage;
+        if (changesPercentage.includes("+") === true) {
           stockUpOrDown.classList.add("stock-up");
         } else {
           stockUpOrDown.classList.add("stock-down");

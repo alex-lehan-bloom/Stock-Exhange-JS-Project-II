@@ -26,7 +26,7 @@ class Company {
       );
     }
   }
-  
+
   async getCompanyProfile(symbol, callback) {
     let response = await fetch(
       `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
@@ -61,6 +61,7 @@ class Company {
   }
 
   setHeaderInfo(header, companyInfo) {
+    let { image, companyName, industry, website } = companyInfo.profile;
     let row = document.createElement("div");
     row.classList.add("row");
     let firstColumn = document.createElement("div");
@@ -71,17 +72,17 @@ class Company {
     thirdColumn.classList.add("col-3");
     let logo = document.createElement("img");
     logo.classList.add("company-logo");
-    logo.src = companyInfo.profile.image;
+    logo.src = image;
     let name = document.createElement("h1");
     name.classList.add("company-name");
-    name.textContent = companyInfo.profile.companyName;
-    let industry = document.createElement("p");
-    industry.textContent = `(${companyInfo.profile.industry})`;
-    let website = document.createElement("a");
-    website.classList.add("website+");
-    website.textContent = companyInfo.profile.website;
-    website.href = companyInfo.profile.website;
-    website.target = "_blank";
+    name.textContent = companyName;
+    let industryPar = document.createElement("p");
+    industryPar.textContent = `(${industry})`;
+    let websiteLink = document.createElement("a");
+    websiteLink.classList.add("website");
+    websiteLink.textContent = website;
+    websiteLink.href = website;
+    websiteLink.target = "_blank";
     header.append(row);
     row.append(firstColumn, secondColumn, thirdColumn);
     firstColumn.append(logo);
@@ -98,27 +99,29 @@ class Company {
   }
 
   setStockPrice(mainContentContainer, companyInfo) {
+    let { price, changesPercentage } = companyInfo.profile;
     let companyStockContainer = document.createElement("div");
     companyStockContainer.classList.add("stock-info");
-    let price = document.createElement("h3");
-    price.classList.add("stock-price");
-    price.textContent = `$${companyInfo.profile.price}`;
+    let priceHeader = document.createElement("h3");
+    priceHeader.classList.add("stock-price");
+    priceHeader.textContent = `Stock Price: $${price}`;
     let stockUpOrDown = document.createElement("span");
-    stockUpOrDown.textContent = `${companyInfo.profile.changesPercentage}`;
-    if (companyInfo.profile.changesPercentage.includes("+") === true) {
+    stockUpOrDown.textContent = `${changesPercentage}`;
+    if (changesPercentage.includes("+") === true) {
       stockUpOrDown.classList.add("stock-up");
     } else {
       stockUpOrDown.classList.add("stock-down");
     }
-    companyStockContainer.append(price, stockUpOrDown);
+    companyStockContainer.append(priceHeader, stockUpOrDown);
     mainContentContainer.append(companyStockContainer);
   }
 
   setDescription(mainContentContainer, companyInfo) {
-    let description = document.createElement("p");
-    description.classList.add("description");
-    description.textContent = companyInfo.profile.description;
-    mainContentContainer.append(description);
+    let { description } = companyInfo.profile;
+    let descriptionPar = document.createElement("p");
+    descriptionPar.classList.add("description");
+    descriptionPar.textContent = description;
+    mainContentContainer.append(descriptionPar);
   }
 
   async getStockPriceHistory(symbol, callback) {

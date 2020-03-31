@@ -122,7 +122,7 @@ class SearchForm {
     this.alert.classList.add("hide-element");
   }
 
-  debounce(cb, interval, immediate) {
+  debounce(cb, interval, immediate) { // understand me
     let timeout;
     return function() {
       let context = this,

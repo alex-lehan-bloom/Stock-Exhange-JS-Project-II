@@ -1,5 +1,5 @@
 let mainPageMarquee = new Marquee(document.getElementById("marquee"));
-mainPageMarquee.createMarque();
+mainPageMarquee.load();
 let searchForm = new SearchForm(
   document.getElementById("search"),
   document.getElementById("searchResults"),
