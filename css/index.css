@@ -9,7 +9,7 @@
   margin-top: 20px;
   width: 700px;
   justify-content: center;
-  margin-left: 150px;
+  margin-left: 101px;
 }
 .search-container .btn {
   background-color: rgba(0, 0, 0, 0.7);
@@ -29,7 +29,7 @@
 .search-container .compare {
   background-color: rgb(247, 242, 242);
   height: 50px;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -89,7 +89,7 @@
 .spinner-border {
   display: none;
   margin-left: 20px;
-  margin-top: 153px;
+  margin-top: 183px;
 }
 .display-element {
   display: inline-block;
