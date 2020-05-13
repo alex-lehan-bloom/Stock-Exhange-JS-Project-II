@@ -34,12 +34,12 @@ class SearchForm {
         let listOfCompanyProfiles = await this.getCompanyProfiles(
           searchResults
         );
-        callback(listOfCompanyProfiles, this.searchBar.value);
+        callback(listOfCompanyProfiles, this.searchQuery);
       }
     }, 400);
   }
 
-  async search(callback) {
+  async search() {
     this.hideSearchAlert();
     this.showSpinner();
     this.clearPreviousSearchResults();
@@ -59,7 +59,7 @@ class SearchForm {
     }
   }
 
-  async getCompanyProfiles(listOfCompanySymbols, callback) {
+  async getCompanyProfiles(listOfCompanySymbols) {
     let arrayOfFetchRequests = [];
     let companiesForFetchRequest = [];
     let finalIndexPosition = 2;
@@ -146,14 +146,14 @@ class SearchForm {
     };
   }
 
-  searchIfSymbolInURL(callback) {
+  async searchIfSymbolInURL(callback) {
     this.symbol = this.urlParams.get("symbol");
+    this.searchQuery = this.symbol;
+
     if (this.symbol !== null) {
-      this.search(this.symbol, (data) => {
-        this.getCompanyProfiles(data, (listOfCompanyProfiles) => {
-          callback(listOfCompanyProfiles, this.searchBar.value);
-        });
-      });
+      let searchResults = await this.search();
+      let listOfCompanyProfiles = await this.getCompanyProfiles(searchResults);
+      callback(listOfCompanyProfiles, this.searchQuery);
       this.searchBar.value = this.symbol;
     }
   }

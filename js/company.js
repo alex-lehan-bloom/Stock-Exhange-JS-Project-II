@@ -5,26 +5,19 @@ class Company {
   }
 
   loadCompanyInfo() {
-    for (let i = 0; i < this.symbols.length; i++) {
-      this.getCompanyProfile(
-        this.symbols[i],
-        (companyInfo, divContainingCompany) => {
-          this.createHeader(divContainingCompany, (header) => {
-            this.setHeaderInfo(header, companyInfo);
-          });
-          this.createDivForMainCompanyInfo(
-            divContainingCompany,
-            (divForMainCompanyInfo) => {
-              this.setStockPrice(divForMainCompanyInfo, companyInfo);
-              this.setDescription(divForMainCompanyInfo, companyInfo);
-              this.getStockPriceHistory(this.symbols[i], (stockHistory) => {
-                this.createGraph(divForMainCompanyInfo, stockHistory);
-              });
-            }
-          );
-        }
+    this.symbols.map(async (companySymbol) => {
+      let divForCompany = this.createDivForCompanyInfo();
+      let header = this.createHeader(divForCompany);
+      let companyProfile = await this.getCompanyProfile(companySymbol);
+      this.setHeaderInfo(header, companyProfile);
+      let divForMainContent = this.createDivForInfoBelowHeader(divForCompany);
+      this.setStockPrice(divForMainContent, companyProfile);
+      this.setDescription(divForMainContent, companyProfile);
+      let stockHistoryOfCompany = await this.getStockPriceHistory(
+        companySymbol
       );
-    }
+      this.createGraph(divForMainContent, stockHistoryOfCompany);
+    });
   }
 
   createDivForCompanyInfo() {
@@ -39,10 +32,10 @@ class Company {
       }
       this.divForPage.append(companyNumber);
     }
-    let divContainingCompany = document.createElement("div");
-    divContainingCompany.classList.add("main");
-    this.divForPage.append(divContainingCompany);
-    return divContainingCompany;
+    let divContainingCompanyInfo = document.createElement("div");
+    divContainingCompanyInfo.classList.add("main");
+    this.divForPage.append(divContainingCompanyInfo);
+    return divContainingCompanyInfo;
   }
 
   async getCompanyProfile(symbol, callback) {
@@ -50,14 +43,14 @@ class Company {
       `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
     );
     let companyInfo = await response.json();
-    callback(companyInfo, this.createDivForCompanyInfo());
+    return companyInfo;
   }
 
-  createHeader(companyContainer, callback) {
+  createHeader(divForCompany) {
     let header = document.createElement("div");
     header.classList.add("header");
-    companyContainer.prepend(header);
-    callback(header);
+    divForCompany.prepend(header);
+    return header;
   }
 
   setHeaderInfo(header, companyInfo) {
@@ -91,14 +84,14 @@ class Company {
     header.append(website);
   }
 
-  createDivForMainCompanyInfo(companyContainer, callback) {
+  createDivForInfoBelowHeader(divForCompany) {
     let divForMainCompanyInfo = document.createElement("div");
     divForMainCompanyInfo.classList.add("main-content");
-    companyContainer.append(divForMainCompanyInfo);
-    callback(divForMainCompanyInfo);
+    divForCompany.append(divForMainCompanyInfo);
+    return divForMainCompanyInfo;
   }
 
-  setStockPrice(divForMainCompanyInfo, companyInfo) {
+  setStockPrice(divForMainContent, companyInfo) {
     let { price, changesPercentage } = companyInfo.profile;
     let companyStockContainer = document.createElement("div");
     companyStockContainer.classList.add("stock-info");
@@ -113,29 +106,29 @@ class Company {
       stockUpOrDown.classList.add("stock-down");
     }
     companyStockContainer.append(priceHeader, stockUpOrDown);
-    divForMainCompanyInfo.append(companyStockContainer);
+    divForMainContent.append(companyStockContainer);
   }
 
-  setDescription(divForMainCompanyInfo, companyInfo) {
+  setDescription(divForMainContent, companyInfo) {
     let { description } = companyInfo.profile;
     let descriptionPar = document.createElement("p");
     descriptionPar.classList.add("description");
     descriptionPar.textContent = description;
-    divForMainCompanyInfo.append(descriptionPar);
+    divForMainContent.append(descriptionPar);
   }
 
-  async getStockPriceHistory(symbol, callback) {
+  async getStockPriceHistory(companySymbol) {
     let response = await fetch(
-      `https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}?serietype=line`
+      `https://financialmodelingprep.com/api/v3/historical-price-full/${companySymbol}?serietype=line`
     );
     let stockHistory = await response.json();
-    callback(stockHistory);
+    return stockHistory;
   }
 
-  createGraph(divForMainCompanyInfo, stockHistory) {
+  createGraph(divForMainContent, stockHistory) {
     let ctx = document.createElement("canvas");
     ctx.classList.add("chart");
-    divForMainCompanyInfo.append(ctx);
+    divForMainContent.append(ctx);
     let chart = new Chart(ctx, {
       type: "line",
       data: {
