@@ -1,8 +1,7 @@
 let urlParams = new URLSearchParams(window.location.search);
-let symbol = urlParams.get("symbol");
-console.log(symbol);
+let symbols = urlParams.get("symbol");
 let companyInfo = new Company(
   document.getElementById("companiesToCompare"),
-  symbol
+  symbols
 );
-companyInfo.load();
+companyInfo.loadCompanyInfo();
