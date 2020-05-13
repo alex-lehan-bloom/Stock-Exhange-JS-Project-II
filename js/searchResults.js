@@ -8,9 +8,9 @@ class SearchResults {
     );
   }
 
-  displaySearchResults(listOfCompanyProfiles, userInput) {
-    this.userInput = userInput;
-    listOfCompanyProfiles.map(profile => {
+  displaySearchResults(listOfCompanyProfiles, searchQuery) {
+    this.searchQuery = searchQuery;
+    listOfCompanyProfiles.map((profile) => {
       let { image, companyName, changesPercentage } = profile.profile;
       let img = document.createElement("img");
       img.src = image;
@@ -24,12 +24,12 @@ class SearchResults {
       name.target = "_blank";
       name.textContent = companyName;
       let highlightName = new Mark(name);
-      highlightName.mark(userInput);
+      highlightName.mark(searchQuery);
       let symbol = document.createElement("span");
       symbol.classList.add("company-symbol");
       symbol.textContent = `(${profile.symbol})`;
       let highlightSymbol = new Mark(symbol);
-      highlightSymbol.mark(userInput);
+      highlightSymbol.mark(searchQuery);
       let stockUpOrDown = document.createElement("span");
       if (changesPercentage !== null) {
         stockUpOrDown.textContent = changesPercentage;
@@ -93,12 +93,11 @@ class SearchResults {
       this.openCompanyComparisonPage.textContent = "";
       this.openCompanyComparisonPage.href = `./company.html?symbol=`;
       for (let i = 0; i < this.companiesToCompare.length; i++) {
-        console.log(this.companiesToCompare.length);
-        console.log(this.companiesToCompare);
         if (profile.symbol === this.companiesToCompare[i]) {
           this.companiesToCompare.splice(i);
         }
         if (this.companiesToCompare.length === 0) {
+          u;
           this.openCompanyComparisonPage.textContent = "Compare companies";
         } else if (this.companiesToCompare.length === 1) {
           this.openCompanyComparisonPage.textContent = `Compare ${this.companiesToCompare.length} company`;

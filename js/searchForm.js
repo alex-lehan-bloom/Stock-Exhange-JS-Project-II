@@ -23,17 +23,18 @@ class SearchForm {
   }
 
   onSearch(callback) {
-    this.searchBar.onkeyup = this.debounce(() => {
+    this.searchBar.onkeyup = this.debounce(async () => {
       this.searchQuery = this.searchBar.value;
-      if (this.searchQuery.length === 0) {
+      if (this.searchQuery.length == 0) {
+        this.hideSearchAlert();
         this.clearPreviousSearchResults();
         this.deleteURLParameters();
       } else {
-        this.search((searchResults) => {
-          this.getCompanyProfiles(searchResults, (listOfCompanyProfiles) => {
-            callback(listOfCompanyProfiles, this.searchBar.value);
-          });
-        });
+        let searchResults = await this.search();
+        let listOfCompanyProfiles = await this.getCompanyProfiles(
+          searchResults
+        );
+        callback(listOfCompanyProfiles, this.searchBar.value);
       }
     }, 400);
   }
@@ -42,6 +43,7 @@ class SearchForm {
     this.hideSearchAlert();
     this.showSpinner();
     this.clearPreviousSearchResults();
+    this.addSearchQueryAsURLParameter();
     let response = await fetch(
       `https://financialmodelingprep.com/api/v3/search?query=${this.searchQuery}&limit=10&exchange=NASDAQ`
     );
@@ -53,12 +55,11 @@ class SearchForm {
       let listOfCompanySymbols = searchResults.map((company) => {
         return company.symbol;
       });
-      callback(listOfCompanySymbols);
+      return listOfCompanySymbols;
     }
-    this.addSearchQueryAsURLParameter();
   }
 
-  getCompanyProfiles(listOfCompanySymbols, callback) {
+  async getCompanyProfiles(listOfCompanySymbols, callback) {
     let arrayOfFetchRequests = [];
     let companiesForFetchRequest = [];
     let finalIndexPosition = 2;
@@ -80,15 +81,18 @@ class SearchForm {
         );
       }
     }
-    Promise.all(
+    let listOfCompanyProfiles = Promise.all(
       arrayOfFetchRequests.map((url) =>
         fetch(url).then((response) => response.json())
       )
     ).then((data) => {
+      let flattenedListOfCompanyProfiles = [];
       for (let i = 0; i < data.length; i++) {
-        callback(data[i].companyProfiles);
+        flattenedListOfCompanyProfiles.push(...data[i].companyProfiles);
       }
+      return flattenedListOfCompanyProfiles;
     });
+    return listOfCompanyProfiles;
   }
 
   showSpinner() {
