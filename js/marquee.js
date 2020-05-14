@@ -5,19 +5,18 @@ class Marquee {
     this.marqueeContainer.classList.add("marquee-container");
   }
 
-  load() {
-    this.getStockResults(stockResults => {
-      this.createMarquee(stockResults);
-    });
+  async load() {
+    let stockResults = await this.getStockResultsForAllCompanies();
+    this.createMarquee(stockResults);
   }
 
-  async getStockResults(callback) {
+  async getStockResultsForAllCompanies() {
     this.marquee.append(this.marqueeContainer);
     let response = await fetch(
       `https://financialmodelingprep.com/api/v3/stock/real-time-price`
     );
     let data = await response.json();
-    callback(data);
+    return data;
   }
 
   createMarquee(stockResults) {

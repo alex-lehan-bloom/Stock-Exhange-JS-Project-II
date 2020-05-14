@@ -11,7 +11,6 @@ class SearchForm {
     this.searchBar = document.createElement("input");
     this.searchBar.classList.add("form-control");
     this.searchBar.placeholder = "search";
-    this.searchContainer.append(this.searchBar);
     this.zeroResultsAlert = document.createElement("div");
     this.zeroResultsAlert.classList.add(
       "alert",
@@ -19,7 +18,7 @@ class SearchForm {
       "hide-element"
     );
     this.zeroResultsAlert.textContent = "Your search returned 0 results";
-    this.searchContainer.append(this.zeroResultsAlert);
+    this.searchContainer.append(this.searchBar, this.zeroResultsAlert);
   }
 
   onSearch(callback) {

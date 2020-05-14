@@ -119,14 +119,12 @@ class SearchResults {
   removeCompanyToCompare(profile, companyToCompare) {
     companyToCompare.addEventListener("click", () => {
       companyToCompare.remove();
-      this.linkForCompaniesToCompare.textContent = "";
-      this.linkForCompaniesToCompare.href = `./company.html?symbol=`;
       for (let i = 0; i < this.symbolsOfCompaniesToCompare.length; i++) {
         if (profile.symbol === this.symbolsOfCompaniesToCompare[i]) {
           this.symbolsOfCompaniesToCompare.splice(i);
         }
-        this.createLinkForCompaniesToCompare();
       }
+      this.createLinkForCompaniesToCompare();
     });
   }
 
@@ -144,11 +142,11 @@ class SearchResults {
   createLinkForCompaniesToCompare() {
     this.linkForCompaniesToCompare.textContent = "";
     this.linkForCompaniesToCompare.href = `./company.html?symbol=`;
-    for (let i = 0; i < this.symbolsOfCompaniesToCompare.length; i++) {
-      if (this.symbolsOfCompaniesToCompare.length === 0) {
-        this.linkForCompaniesToCompare.removeAttribute("href");
-        this.linkForCompaniesToCompare.textContent = "Compare companies";
-      } else {
+    if (this.symbolsOfCompaniesToCompare.length === 0) {
+      this.linkForCompaniesToCompare.removeAttribute("href");
+      this.linkForCompaniesToCompare.textContent = "Compare companies";
+    } else {
+      for (let i = 0; i < this.symbolsOfCompaniesToCompare.length; i++) {
         if (i === 0) {
           this.linkForCompaniesToCompare.href += `${this.symbolsOfCompaniesToCompare[i]}`;
           this.linkForCompaniesToCompare.textContent = `Compare ${this.symbolsOfCompaniesToCompare.length} company`;
