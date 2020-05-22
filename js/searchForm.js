@@ -29,6 +29,7 @@ class SearchForm {
         this.clearPreviousSearchResults();
         this.deleteURLParameters();
       } else {
+        this.prepareForSearch();
         let searchResults = await this.search();
         let listOfCompanyProfiles = await this.getCompanyProfiles(
           searchResults
@@ -38,13 +39,16 @@ class SearchForm {
     }, 400);
   }
 
-  async search() {
+  prepareForSearch() {
     this.hideSearchAlert();
     this.showSpinner();
     this.clearPreviousSearchResults();
     this.addSearchQueryAsURLParameter();
+  }
+
+  async search() {
     let response = await fetch(
-      `https://financialmodelingprep.com/api/v3/search?query=${this.searchQuery}&limit=10&exchange=NASDAQ`
+      `https://financialmodelingprep.com/api/v3/search?query=${this.searchQuery}&limit=10&exchange=NASDAQ&apikey=${apiKey}`
     );
     let searchResults = await response.json();
     if (searchResults.length === 0) {
@@ -76,7 +80,7 @@ class SearchForm {
         arrayOfFetchRequests.push(
           `https://financialmodelingprep.com/api/v3/company/profile/${companiesForFetchRequest[0]},
           ${companiesForFetchRequest[1]},
-          ${companiesForFetchRequest[2]}`
+          ${companiesForFetchRequest[2]}?apikey=${apiKey}`
         );
       }
     }
@@ -148,7 +152,6 @@ class SearchForm {
   async searchIfSymbolInURL(callback) {
     this.symbol = this.urlParams.get("symbol");
     this.searchQuery = this.symbol;
-
     if (this.symbol !== null) {
       let searchResults = await this.search();
       let listOfCompanyProfiles = await this.getCompanyProfiles(searchResults);

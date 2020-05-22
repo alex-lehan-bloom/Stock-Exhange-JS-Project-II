@@ -13,7 +13,7 @@ class Marquee {
   async getStockResultsForAllCompanies() {
     this.marquee.append(this.marqueeContainer);
     let response = await fetch(
-      `https://financialmodelingprep.com/api/v3/stock/real-time-price`
+      `https://financialmodelingprep.com/api/v3/stock/real-time-price?apikey=${apiKey}`
     );
     let data = await response.json();
     return data;

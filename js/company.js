@@ -38,9 +38,9 @@ class Company {
     return divContainingCompanyInfo;
   }
 
-  async getCompanyProfile(symbol, callback) {
+  async getCompanyProfile(symbol) {
     let response = await fetch(
-      `https://financialmodelingprep.com/api/v3/company/profile/${symbol}`
+      `https://financialmodelingprep.com/api/v3/company/profile/${symbol}?apikey=${apiKey}`
     );
     let companyInfo = await response.json();
     return companyInfo;
@@ -119,9 +119,10 @@ class Company {
 
   async getStockPriceHistory(companySymbol) {
     let response = await fetch(
-      `https://financialmodelingprep.com/api/v3/historical-price-full/${companySymbol}?serietype=line`
+      `https://financialmodelingprep.com/api/v3/historical-price-full/${companySymbol}?serietype=line&apikey=${apiKey}`
     );
     let stockHistory = await response.json();
+    stockHistory.historical = stockHistory.historical.reverse();
     return stockHistory;
   }
 
@@ -146,6 +147,7 @@ class Company {
     });
     let year = 2005;
     let startDateOfStock = stockHistory.historical[0].date.slice(0, 4);
+    console.log(startDateOfStock);
     if (startDateOfStock > year.toString()) {
       year = parseInt(startDateOfStock);
     }
@@ -153,6 +155,8 @@ class Company {
       if (stockHistory.historical[i].date.slice(0, 4) === year.toString()) {
         chart.data.labels.push(year);
         chart.data.datasets[0].data.push(stockHistory.historical[i].close);
+        console.log(chart.data.datasets[0].data);
+        console.log(chart.data.labels);
         year += 1;
       }
     }
